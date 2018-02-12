@@ -25,3 +25,8 @@ class Database:
         result = cursor.lastrowid
         cursor.close()
         return result
+
+    def select(self, q, args=()):
+        cursor = self.connection.cursor()
+
+        return cursor.execute(q, args)

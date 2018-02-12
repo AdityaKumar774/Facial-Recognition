@@ -18,6 +18,15 @@ def success_handle(output, status=200, mimetype='application/json'):
 def error_handle(error_message, status=500, mimetype='application/json'):
     return Response(json.dumps({"error": {"message": error_message}}), status=status, mimetype=mimetype)
 
+def get_user_by_id(user_id):
+    user = {}
+    results = app.db.select('SELECT users.id, users.name, users.created, faces.id, faces.user_id, faces.filename, faces.created FROM users LEFT JOIN faces ON faces.user_id = user_id WHERE users.id = ?', [user_id])
+    for row in results:
+        print(row)
+
+    return user
+def delete_user_by_id(user_id):
+    print("Ok do it later")
 
 @app.route('/', methods=['GET'])
 def homepage():
@@ -55,7 +64,7 @@ def train():
             if user_id:
                 print("User saved in database", name, user_id)
                 # user has been saved with user_id and name now its timw to save faces
-                face_id = app.db.insert('INSERT INTO faces(user_id, filename, created) VALUES (?, ?,                                             ?)', [user_id, filename, created])
+                face_id = app.db.insert('INSERT INTO faces(user_id, filename, created) VALUES (?, ?, ?)', [user_id, filename, created])
 
                 if face_id:
                     print("Face has been saved to database")
@@ -74,5 +83,16 @@ def train():
 
     return success_handle(output)
 
+
+# routing for user profile
+@app.route('/api/users/<int:user_id>', methods=['GET', 'DELETE'])
+def user_profile(user_id):
+    if request.method == 'GET':
+        user = get_user_by_id(user_id)
+
+        return success_handle(user, 200)
+    if request.method == 'DELETE':
+        delete_user_by_id(user_id)
+        return success_handle(json.dumps({"deleted": True}))
 
 app.run()
