@@ -3,12 +3,14 @@ from werkzeug.utils import secure_filename
 from os import path, getcwd
 from db import Database
 import time
+from face import Face
 
 app = Flask(__name__)
 
 app.config['file_allowed'] = ['image/png', 'image/jpeg', 'image/jpg']
 app.config['storage'] = path.join(getcwd(), 'storage')
 app.db = Database()
+app.face = Face(app)
 
 
 def success_handle(output, status=200, mimetype='application/json'):
@@ -76,7 +78,9 @@ def train():
             print("Information of that face is", name)
             print("File is allowed and will be saved in ", app.config['storage'])
             filename = secure_filename(file.filename)
-            file.save(path.join(app.config['storage'], filename))
+
+            trained_storage = path.join(app.config['storage'], 'trained')
+            file.save(path.join(trained_storage, filename))
             # saving files to our storage
 
             # save files to sqlite3 database.db
@@ -118,5 +122,24 @@ def user_profile(user_id):
     if request.method == 'DELETE':
         delete_user_by_id(user_id)
         return success_handle(json.dumps({"deleted": True}))
+
+#routing for recognizing an unknown face
+@app.route('/api/recognize', methods=['POST'])
+def recognize():
+
+    if 'file' not in request.files:
+        return error_handle("Image is required")
+    else:
+        file = request.files['file']
+        # file extension validate
+        if file.mimetype not in app.config['file_allowed']:
+            return error_handle("File extension not allowed.")
+        else:
+            filename = secure_filename(file.filename)
+            unknown_storage = path.join(app.config["storage"], 'unknown')
+            file_path = path.join(unknown_storage, filename)
+            file.save(file_path)
+
+    return success_handle(json.dumps({"filename_to_compare_is": filename}))
 
 app.run()
