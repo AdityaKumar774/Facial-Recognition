@@ -21,12 +21,34 @@ def error_handle(error_message, status=500, mimetype='application/json'):
 def get_user_by_id(user_id):
     user = {}
     results = app.db.select('SELECT users.id, users.name, users.created, faces.id, faces.user_id, faces.filename, faces.created FROM users LEFT JOIN faces ON faces.user_id = user_id WHERE users.id = ?', [user_id])
+
+    index = 0
     for row in results:
         print(row)
+        face = {
+            "id": row[3],
+            "user_id": row[4],
+            "filename": row[5],
+            "created": row[6],
+        }
+        if index == 0:
+            user = {
+                "id": row[0],
+                "name": row[1],
+                "created": row[2],
+                "faces": [],
+            }
+        if 3 in row:
+            user["faces"].append(face)
+        index = index + 1
+    if 'id' in user:
+        return user
+    return None
 
-    return user
 def delete_user_by_id(user_id):
-    print("Ok do it later")
+    app.db.delete('DELETE FROM users WHERE users.id = ?', [user_id])
+    # also delete the faces with user id
+    app.db.delete('DELETE FROM faces WHERE faces.user_id = ?', [user_id])
 
 @app.route('/', methods=['GET'])
 def homepage():
@@ -89,8 +111,10 @@ def train():
 def user_profile(user_id):
     if request.method == 'GET':
         user = get_user_by_id(user_id)
-
-        return success_handle(user, 200)
+        if user:
+            return success_handle(json.dumps(user), 200)
+        else:
+            return error_handle("User Not Found", 404)
     if request.method == 'DELETE':
         delete_user_by_id(user_id)
         return success_handle(json.dumps({"deleted": True}))
