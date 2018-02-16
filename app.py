@@ -3,7 +3,7 @@ from werkzeug.utils import secure_filename
 from os import path, getcwd
 from db import Database
 import time
-from face import Face
+from work_dir.face.face import Face
 
 app = Flask(__name__)
 
@@ -20,9 +20,12 @@ def success_handle(output, status=200, mimetype='application/json'):
 def error_handle(error_message, status=500, mimetype='application/json'):
     return Response(json.dumps({"error": {"message": error_message}}), status=status, mimetype=mimetype)
 
+
 def get_user_by_id(user_id):
     user = {}
-    results = app.db.select('SELECT users.id, users.name, users.created, faces.id, faces.user_id, faces.filename, faces.created FROM users LEFT JOIN faces ON faces.user_id = user_id WHERE users.id = ?', [user_id])
+    results = app.db.select(
+        'SELECT users.id, users.name, users.created, faces.id, faces.user_id, faces.filename, faces.created FROM users LEFT JOIN faces ON faces.user_id = user_id WHERE users.id = ?',
+        [user_id])
 
     index = 0
     for row in results:
@@ -47,16 +50,18 @@ def get_user_by_id(user_id):
         return user
     return None
 
+
 def delete_user_by_id(user_id):
     app.db.delete('DELETE FROM users WHERE users.id = ?', [user_id])
     # also delete the faces with user id
     app.db.delete('DELETE FROM faces WHERE faces.user_id = ?', [user_id])
 
+
 @app.route('/', methods=['GET'])
 def homepage():
-
     output = json.dumps({"api": "1.0"})
     return success_handle(output)
+
 
 @app.route('/api/train', methods=['POST'])
 def train():
@@ -90,7 +95,8 @@ def train():
             if user_id:
                 print("User saved in database", name, user_id)
                 # user has been saved with user_id and name now its timw to save faces
-                face_id = app.db.insert('INSERT INTO faces(user_id, filename, created) VALUES (?, ?, ?)', [user_id, filename, created])
+                face_id = app.db.insert('INSERT INTO faces(user_id, filename, created) VALUES (?, ?, ?)',
+                                        [user_id, filename, created])
 
                 if face_id:
                     print("Face has been saved to database")
@@ -123,10 +129,10 @@ def user_profile(user_id):
         delete_user_by_id(user_id)
         return success_handle(json.dumps({"deleted": True}))
 
-#routing for recognizing an unknown face
+
+# routing for recognizing an unknown face
 @app.route('/api/recognize', methods=['POST'])
 def recognize():
-
     if 'file' not in request.files:
         return error_handle("Image is required")
     else:
@@ -141,5 +147,6 @@ def recognize():
             file.save(file_path)
 
     return success_handle(json.dumps({"filename_to_compare_is": filename}))
+
 
 app.run()
