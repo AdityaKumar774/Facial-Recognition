@@ -105,7 +105,7 @@ def train():
                     return success_handle(return_output)
                 else:
                     print("Error in saving face image")
-                    return error_handle("An error had occured while saving the face")
+                    return error_handle("An error had occurred while saving the face")
 
             else:
                 print("Something went wrong")
@@ -145,6 +145,14 @@ def recognize():
             unknown_storage = path.join(app.config["storage"], 'unknown')
             file_path = path.join(unknown_storage, filename)
             file.save(file_path)
+
+            user_id = app.face.recognize(filename)
+            if user_id:
+                user = get_user_by_id(user_id)
+                message = {"message": "Hey we found {0} matched with your image".format(user["name"]), "user": user}
+                return success_handle(json.dumps())
+            else:
+                return error_handle("Sorry")
 
     return success_handle(json.dumps({"filename_to_compare_is": filename}))
 
