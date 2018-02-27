@@ -1,4 +1,4 @@
-from flask import Flask, json, Response, request
+from flask import Flask, json, Response, request, render_template
 from werkzeug.utils import secure_filename
 from os import path, getcwd
 from db import Database
@@ -56,8 +56,13 @@ def delete_user_by_id(user_id):
     # also delete the faces with user id
     app.db.delete('DELETE FROM faces WHERE faces.user_id = ?', [user_id])
 
-
+# Route for homepage
 @app.route('/', methods=['GET'])
+def page_home():
+
+    return render_template('index.html')
+
+@app.route('/api', methods=['GET'])
 def homepage():
     output = json.dumps({"api": "1.0"})
     return success_handle(output)
