@@ -6,11 +6,13 @@
 .message .success{
     padding: 10px;
     border: 1px solid #00e640;
+    color: #00e640;
 }
 
 .message .error{
     padding: 10px;
     border: 1px solid #CF000F;
+    color: #CF000F;
 }
 
 .form-item label{
