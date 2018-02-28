@@ -1,24 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title> Facial Recognition Application </title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+
     <script type="text/javascript" src="{{ url_for('static', filename='lodash.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='immutable.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='jquery-3.3.1.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
 </head>
+
 <body>
-<h1> Facial Recognition </h1>
+
 <div class="container">
-    <h2> Train it </h2>
-    <form method="post" id="train">
-        <div class="form-item">
-            <label> Face Image </label>
-            <input type="file" name="file" id="input-file" accept="image/*" />
-        </div>
-    </form>
+    <h1> Facial Recognition </h1>
+
+    <div id="train-content">
+        <h2> Train it </h2>
+
+        <form method="post" id="train">
+            <div class="message">
+                <p class="success"> Training has been done </p>
+            </div>
+
+            <p class="description"> Pre-training our services, upload an image containing face. </p>
+
+            <div class="form-item">
+                <label for="input-file"> Face Image </label>
+                <input type="file" name="file" id="input-file" accept="image/*" />
+            </div>
+            <br />
+
+            <div class="form-item">
+                <label> Full Name: </label>
+                <input name="name" value="" type="text" placeholder="Full Name" />
+            </div>
+            <br />
+
+            <div class="form-action">
+                <button type="submit"> Begin Training </button>
+            </div>
+
+        </form>
+    </div>
+
 </div>
+
 </body>
 </html>

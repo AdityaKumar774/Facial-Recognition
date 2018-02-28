@@ -1,0 +1,30 @@
+.container{
+    max-width: 950px;
+    margin: 0 auto;
+}
+
+.message .success{
+    padding: 10px;
+    border: 1px solid #00e640;
+}
+
+.message .error{
+    padding: 10px;
+    border: 1px solid #CF000F;
+}
+
+.form-item label{
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.form-item input[type="text"]{
+    padding: 5px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.form-action button{
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    padding: 8px 15px;
+}
