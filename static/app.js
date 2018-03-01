@@ -46,7 +46,7 @@ $(document).ready(function () {
             train_form_data.append('name', train_data.name);
             train_form_data.append('file', train_data.file);
             axios.post('/api/train', train_form_data).then(function(response){
-                message = {type: 'success', message: 'Training has been done, user with id is: ' +_.get(response, 'data.id')};
+                message = {type: 'success', message: 'Training has been done, user with id: ' +_.get(response, 'data.id')};
                 update();
             }).catch(function (error) {
 
