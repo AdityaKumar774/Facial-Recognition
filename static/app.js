@@ -37,7 +37,6 @@ $(document).ready(function () {
 
     // form submission event
     $('#train').submit(function (event) {
-
         message = null;
 
         if(train_data.name && train_data.file){
@@ -49,7 +48,6 @@ $(document).ready(function () {
                 message = {type: 'success', message: 'Training has been done, user with id: ' +_.get(response, 'data.id')};
                 update();
             }).catch(function (error) {
-
                 message = {type: 'error', message: _.get(error, 'response.data.error.message', 'Unknown Error.')}
 
                 update();
@@ -58,6 +56,7 @@ $(document).ready(function () {
         }else {
             message = {type: "error", message: "Name and image is required."}
         }
+
         update();
         event.preventDefault();
     });
