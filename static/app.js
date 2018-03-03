@@ -11,10 +11,10 @@ var active_section = 'train';
 // functions declaration
 function render() {
     // clear form data
-    active_section = 'train';
     $('.form-item input').val('');
     $('.tabs li').removeClass('active');
     $('.tabs li:first').addClass('active');
+    active_section = 'train';
 }
 
 function update() {
@@ -23,6 +23,7 @@ function update() {
         // render message
         $('.message').html('<p class="'+_.get(message, 'type')+'">'+_.get(message, 'message')+'</p>');
     }
+    $('#'+active_section).show();
 }
 
 
@@ -37,6 +38,14 @@ $(document).ready(function () {
     // listen for name change
     $('#name-field').on('change', function (event) {
        train_data.name = _.get(event, 'target.value', '');
+    });
+
+    //listen tab items when clicked
+    $('.tabs li').on('click', function(e){
+        var $this = $(this);
+        console.log(" You clicked on tab", $this.data('section'));
+        active_section = $this.data('section');
+        update();
     });
 
     // form submission event
