@@ -5,12 +5,16 @@ var train_data = {
 }
 
 var message = null;
+var active_section = 'train';
 
 
 // functions declaration
 function render() {
     // clear form data
+    active_section = 'train';
     $('.form-item input').val('');
+    $('.tabs li').removeClass('active');
+    $('.tabs li:first').addClass('active');
 }
 
 function update() {
