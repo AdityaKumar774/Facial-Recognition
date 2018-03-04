@@ -49,7 +49,8 @@ $(document).ready(function () {
         active_section = $this.data('section');
 
         // remove all active class
-        
+        $('.tabs li').removeClass('active');
+        $this.addClass('active');
 
         update();
     });

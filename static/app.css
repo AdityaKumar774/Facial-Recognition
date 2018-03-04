@@ -45,6 +45,7 @@
     font-size: 15px;
     padding: 5px 15px;
     font-weight: 700;
+    cursor: pointer;
 }
 
 .tabs li.active{
