@@ -49,5 +49,8 @@
 
 .tabs li.active{
     color: #00e640;
+}
 
+#train-content, #recognize-content{
+    display: none;
 }

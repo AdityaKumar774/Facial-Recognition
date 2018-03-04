@@ -5,7 +5,7 @@ var train_data = {
 }
 
 var message = null;
-var active_section = 'train';
+var active_section = 'null';
 
 
 // functions declaration
@@ -14,7 +14,8 @@ function render() {
     $('.form-item input').val('');
     $('.tabs li').removeClass('active');
     $('.tabs li:first').addClass('active');
-    active_section = 'train';
+    active_section = 'train-content';
+    $('#'+active_section).show();
 }
 
 function update() {
@@ -23,6 +24,7 @@ function update() {
         // render message
         $('.message').html('<p class="'+_.get(message, 'type')+'">'+_.get(message, 'message')+'</p>');
     }
+    $('#train-content, #recognize-content').hide();
     $('#'+active_section).show();
 }
 
@@ -45,6 +47,10 @@ $(document).ready(function () {
         var $this = $(this);
         console.log(" You clicked on tab", $this.data('section'));
         active_section = $this.data('section');
+
+        // remove all active class
+        
+
         update();
     });
 
