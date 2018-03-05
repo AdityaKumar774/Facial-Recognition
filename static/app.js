@@ -86,11 +86,26 @@ $(document).ready(function () {
     });
 
     // listen for file field change
-    $('#recognize-input-file')
+    $('#recognize-input-file').on('change', function (e) {
+       recognize_data.file = _.get(e, 'target.files[0]', null);
+    });
 
     // listen for recognition form submit
     $('#recognize').submit(function (e) {
         console.log("Form is submitted", recognize_data);
+
+        // call to backend
+        var recog_form_data = new FormData();
+        recog_form_data.append('file', recognize_data.file);
+        axios.post('/api/recognize', recog_form_data).then(function (response) {
+            console.log("We found an user matching with the image", response.data);
+            message = {type: 'success', message: 'We found a user matching with image '+ response.data.user.name};
+            update();
+        }).catch(function(err){
+            message = {type: 'error', message: _.get(err, 'response.data.error.message', 'Unknown error')};
+            update();
+        });
+
        e.preventDefault();
     });
 
