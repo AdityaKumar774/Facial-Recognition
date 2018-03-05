@@ -2,7 +2,11 @@
 var train_data = {
     name: "",
     file: null
-}
+};
+
+var recognize_data = {
+    file: null
+};
 
 var message = null;
 var active_section = 'null';
@@ -80,6 +84,16 @@ $(document).ready(function () {
         update();
         event.preventDefault();
     });
+
+    // listen for file field change
+    $('#recognize-input-file')
+
+    // listen for recognition form submit
+    $('#recognize').submit(function (e) {
+        console.log("Form is submitted", recognize_data);
+       e.preventDefault();
+    });
+
 
     // render the app
     render();
