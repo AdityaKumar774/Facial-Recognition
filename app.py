@@ -3,7 +3,7 @@ from werkzeug.utils import secure_filename
 from os import path, getcwd
 from db import Database
 import time
-from work_dir.face.face import Face
+from face.face import Face
 
 app = Flask(__name__)
 
